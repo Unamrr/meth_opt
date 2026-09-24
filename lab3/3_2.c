@@ -1,4 +1,5 @@
 #include <iostream>
+#include<cmath>
 using namespace std;
 
 
@@ -16,9 +17,11 @@ int main()
 
     int iter = 0;
 
-
-    double y = left + 0.382 * (right - left);
-    double z = left + right - y;
+    double fi = (sqrt(5) - 1) / 2;
+    double y = left + (1 - fi) * (right - left);
+    double z = left + fi * (right - left);
+    //double y = left + 0.382 * (right - left);
+    //double z = left + right - y;
 
     double fy = func(y);
     double fz = func(z);
@@ -32,7 +35,7 @@ int main()
 
         if (fy <= fz)
         {
-            
+
             right = z;
             z = y;
             fz = fy;
@@ -57,11 +60,13 @@ int main()
 
     double xmin = (left + right) / 2;
     double fmin = func(xmin);
+    double R = pow(0.618, iter);
 
     cout << "Результат:" << endl;
     cout << "Интервал минимума: [" << left << "; " << right << "]" << endl;
     cout << "Приближённая точка минимума x = " << xmin << endl;
     cout << "Минимальное значение функции f(x) = " << fmin << endl;
+    cout << "Сходимость R =  " << R << endl;
 
     return 0;
 }
