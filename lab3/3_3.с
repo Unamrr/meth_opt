@@ -1,0 +1,115 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+double func(double x)
+{
+    return x * x - 4 * x + 6;
+}
+
+int main()
+{
+    setlocale(LC_ALL, "Russian");
+
+    double left = 0;
+    double right = 10;
+    double target_len = 1;
+    double eps = 0.001; 
+
+    
+    int F[50];
+    F[0] = 1;
+    F[1] = 1;
+    for (int i = 2; i < 50; i++)
+        F[i] = F[i - 1] + F[i - 2];
+
+    
+    double ratio = (right - left) / target_len;
+    int N = 0;
+    while (F[N] < ratio)
+        N++;
+
+    cout << "Число Фибоначчи F[" << N << "] = " << F[N] << endl;
+    cout << "N = " << N << endl << endl;
+
+    
+    int k = 0;
+    double a = left;
+    double b = right;
+
+    double y = a + (double)F[N - k - 2] / F[N - k] * (b - a);
+    double z = a + (double)F[N - k - 1] / F[N - k] * (b - a);
+
+    double fy = func(y);
+    double fz = func(z);
+
+    int iter = 0;
+
+   
+    while (k < N - 2)
+    {
+        cout << "итерация: " << iter << endl;
+        cout << "a = " << a << ", b = " << b << endl;
+        cout << "y = " << y << ", f(y) = " << fy << endl;
+        cout << "z = " << z << ", f(z) = " << fz << endl;
+
+        if (fy <= fz)
+        {
+            b = z;
+            z = y;
+            fz = fy;
+            k++;
+            y = a + (double)F[N - k - 2] / F[N - k] * (b - a);
+            fy = func(y);
+        }
+        else
+        {
+            a = y;
+            y = z;
+            fy = fz;
+            k++;
+            z = a + (double)F[N - k - 1] / F[N - k] * (b - a);
+            fz = func(z);
+        }
+
+        cout << "Новый интервал: [" << a << "; " << b << "]" << endl;
+        cout << "Длина интервала: " << b - a << endl << endl;
+
+        iter++;
+    }
+
+    
+    cout << "Заключительный шаг" << endl;
+
+    double y_final = (a + b) / 2;
+    double z_final = y_final + eps;
+
+    double fy_final = func(y_final);
+    double fz_final = func(z_final);
+
+    cout << "y_final = " << y_final << ", f(y) = " << fy_final << endl;
+    cout << "z_final = " << z_final << ", f(z) = " << fz_final << endl;
+
+    if (fy_final <= fz_final)
+    {
+        b = z_final;
+    }
+    else
+    {
+        a = y_final;
+    }
+
+    double xmin = (a + b) / 2;
+    double fmin = func(xmin);
+    double R = 1.0 / F[N];
+
+    cout << endl;
+    cout << "Результат:" << endl;
+    cout << "Интервал минимума: [" << a << "; " << b << "]" << endl;
+    cout << "Приближённая точка минимума x = " << xmin << endl;
+    cout << "Минимальное значение функции f(x) = " << fmin << endl;
+    cout << "Длина итогового интервала: " << b - a << endl;
+    cout << "Сходимость R = " << R << endl;
+
+    return 0;
+}
