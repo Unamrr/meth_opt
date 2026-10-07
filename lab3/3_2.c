@@ -19,9 +19,9 @@ int main()
 
     double fi = (sqrt(5) - 1) / 2;
     double y = left + (1 - fi) * (right - left);
-    double z = left + fi * (right - left);
+    double z = left + right - y;
     //double y = left + 0.382 * (right - left);
-    //double z = left + right - y;
+    //double z = left + fi * (right - left);
 
     double fy = func(y);
     double fz = func(z);
